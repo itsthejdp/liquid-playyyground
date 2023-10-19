@@ -1,0 +1,415 @@
+{% style %}
+    {% for block in section.blocks %}
+      @media(max-width:767px){
+        #f-socials{
+        justify-content:{{block.settings.s_alignment_mob}}!important;
+      }
+      #f-links .f-links{
+        justify-content:{{block.settings.alignment_mob}}!important;
+      }
+    }
+    
+    {% endfor %}
+    {% endstyle %}
+    
+    <footer  style="--background_clr: {{section.settings.bg_clr}};--text-color:{{section.settings.text_clr}}; --btn_bg:{{section.settings.btn-bg_clr}}; --btn_txtClr:{{section.settings.btn-text_clr}};">
+    <x-flex direction-s="row" wrap="wrap">
+    {%- for block in section.blocks -%}
+    {%- case block.type -%}
+    {%- when 'motto' -%}
+    <x-cell id="f-motto" class="hasb" data-fullwidth="{{ block.settings.fullwidth }}" {{ block.shopify_attributes }}>
+        <div class="mpti rte">{{ block.settings.motto }}</div>
+    </x-cell>
+    {%- when 'newsletter' -%}
+    <x-cell id="f-newsletter" class="hasb" data-fullwidth="{{ block.settings.fullwidth }}" {{ block.shopify_attributes }}>
+        <x-flex direction="column">
+            <x-cell><p>{{ block.settings.footerNewsletterTitle }}</p></x-cell>
+            <x-cell>{%- render 'global-newsletter', class: 'footer-newsletter', location: 'popup' -%}</x-cell>
+        </x-flex>
+    </x-cell>
+    {%- when 'menu' -%}
+    
+        <x-cell id="f-links" class="hasb {{block.settings.legal_class}}" data-fullwidth="{{ block.settings.fullwidth }}" data-multicolumn="{{ block.settings.multicolumn }}" {{ block.shopify_attributes }}>
+            <x-flex class="f-links" jc="{{ block.settings.alignment }}">
+                <x-cell>
+                    <ul class="no-style footer-menu">
+                    {%- assign linklist = block.settings.menu -%}
+                    {%- for link in linklists[linklist].links -%}
+                    {%- assign mod = forloop.index | modulo: 5 -%}
+                        {%- if mod == 0 -%}
+                        {%- if block.settings.fullwidth != true and block.settings.multicolumn == true -%}
+                        </ul></x-cell><x-cell><ul class="no-style">
+                        {%- endif -%}
+                        {%- endif -%}
+                        <li style="border:5px solid white;" id="terms"><a href="{{ link.url }}" class="no-style">{{ link.title }}</a></li>
+                    {%- endfor -%}
+                    </ul>
+                </x-cell>
+            </x-flex>
+    
+            {%- if block.settings.socialMenu != nil -%}
+              {%- style -%} .foosocial { justify-content: {{ block.settings.s_alignment }} } {%- endstyle -%}
+          
+              <x-flex id="f-socials" class="ssocialss {{ block.settings.s_custom_class }} justify-content-{{ block.settings.s_alignment }}" data-fullwidth="{{ block.settings.s_fullwidth }}" {{ block.shopify_attributes }}>
+                  <ul class="foosocial mob-scroll no-style{% if settings.iconsTrue == true %} iconstrue{% endif %}" style="">
+                      {% render 'global-social' %}
+          
+                      {%- if shop.features.follow_on_shop? and block.settings.enable_follow_on_shop -%}
+                      <li class="follow-on-shop">{{ shop | login_button: action: 'follow' }}</li>
+                      {%- endif -%}
+                  </ul>
+              </x-flex>
+          
+             <script>document.addEventListener("DOMContentLoaded", () => { if (document.querySelector('#f-socials li') === null) { const elx = document.getElementById('f-socials'); elx.remove() } })</script>
+            {%- endif -%}
+        </x-cell>
+       
+    {%- when 'legalLinks' -%}
+        {%- if block.settings.legalMenu != nil -%}
+        <x-cell id="f-links" class="hasb" data-fullwidth="{{ block.settings.fullwidth }}" data-multicolumn="{{ block.settings.multicolumn }}" {{ block.shopify_attributes }}>
+            <x-flex class="f-links" jc="{{ block.settings.alignment }}">
+                
+                <x-cell>
+                    <ul class="no-style">
+                    {%- assign linklist = block.settings.legalMenu -%}
+                    {%- for link in linklists[linklist].links -%}
+                        <li><a href="{{ link.url }}" class="no-style">{{ link.title }}</a></li>
+                    {%- endfor -%}
+                    </ul>
+               
+                </x-cell>
+              
+            </x-flex>
+        </x-cell>
+        {%- endif -%}
+    
+        {%- when 'socials' -%}
+          {%- style -%} .foosocial { justify-content: {{ block.settings.alignment }} } {%- endstyle -%}
+      
+          <x-cell id="f-socials" class="ssocialss {{ block.settings.custom_class }}" data-fullwidth="{{ block.settings.fullwidth }}" {{ block.shopify_attributes }}>
+              <ul class="foosocial mob-scroll no-style{% if settings.iconsTrue == true %} iconstrue{% endif %}" style="">
+                  {% render 'global-social' %}
+      
+                  {%- if shop.features.follow_on_shop? and block.settings.enable_follow_on_shop -%}
+                  <li class="follow-on-shop">{{ shop | login_button: action: 'follow' }}</li>
+                  {%- endif -%}
+              </ul>
+          </x-cell>
+      
+         <script>document.addEventListener("DOMContentLoaded", () => { if (document.querySelector('#f-socials li') === null) { const elx = document.getElementById('f-socials'); elx.remove() } })</script>
+      
+    {%- endcase -%}
+    {%- endfor -%}
+        </x-flex>
+    
+    </footer><script>document.addEventListener("startasyncloading",function(){document.querySelectorAll("link[data-href]").forEach(a=>{datahref=a.dataset.href,null!=datahref&&(a.href=datahref), delete a.dataset.href})});</script><script>document.addEventListener("startasyncloading",function(){document.querySelectorAll("script[type='text/javascripts']").forEach(e=>{var t=document.createElement("script");for(a=0;a<e.attributes.length;a++){var r=e.attributes[a];t.setAttribute(r.name,r.value)}t.type="text/javascript",t.innerHTML=e.innerHTML,e.parentNode.insertBefore(t,e),e.parentNode.removeChild(e)})});</script>
+     
+    
+    {% schema %}
+    {
+      "name": "Footer Mertra",
+      "class": "main-footer",
+      "settings": [
+        {
+        "type":"color",
+        "id":"bg_clr",
+        "default":"#000",
+        "label":"Background Color"
+        },
+        {
+        "type":"color",
+        "id":"text_clr",
+        "default":"#fff",
+        "label":"Text Color"
+        },
+        {
+          "type":"color",
+          "id":"btn-bg_clr",
+          "default":"#fff",
+          "label":"Button Background Color"
+          },
+          {
+          "type":"color",
+          "id":"btn-text_clr",
+          "default":"#000",
+          "label":"Button Text Color"
+          }
+      ],
+      "blocks": [
+        {
+          "type": "newsletter",
+          "name": "Newsletter",
+          "limit": 1,
+          "settings": [
+            {
+              "type": "header",
+              "content": "Footer newsletter",
+              "info": "Subscribers will be added to your “accepts marketing” [customer list.](/admin/customers?query=&accepts_marketing=1)"
+            },
+            {
+              "type": "text",
+              "id": "footerNewsletterTitle",
+              "label": "Heading",
+              "default": "Get 10% off your next purchase. Subscribe to our newsletter."
+            },
+            {
+              "type": "header",
+              "content": "Appereance"
+            },
+            {
+                "type": "checkbox",
+                "id": "fullwidth",
+                "label": "Full width row",
+                "default": false
+            }
+          ]
+        },
+        {
+          "type": "menu",
+          "name": "Footer menu",
+          "limit": 1,
+          "settings": [
+            {
+              "type": "link_list",
+              "id": "menu",
+              "label": "Menu",
+              "default": "footer",
+              "info": "Only top-level menu items are displayed."
+            },
+            {
+              "type": "header",
+              "content": "Appereance"
+            },
+            {
+                "type": "select",
+                "id": "alignment",
+                "label": "Alignment",
+                "default": "start",
+                "options": [
+                    { "value": "start", "label": "Left" },
+                    { "value": "center", "label": "Center" },
+                    { "value": "end", "label": "Right" }
+                ]
+            },
+            {
+              "type": "select",
+              "id": "alignment_mob",
+              "label": "Mobile Alignment",
+              "default": "start",
+              "options": [
+                  { "value": "start", "label": "Left" },
+                  { "value": "center", "label": "Center" },
+                  { "value": "end", "label": "Right" }
+              ]
+          },
+            {
+                "type": "checkbox",
+                "id": "multicolumn",
+                "label": "Multi-column menu",
+                "default": true,
+                "info": "Does not work when \"Full width row\" active."
+            },
+            {
+                "type": "checkbox",
+                "id": "fullwidth",
+                "label": "Full width row",
+                "default": false
+            },
+            {
+              "type": "text",
+              "id": "legal_class",
+              "label": "Custom classes"
+            },
+            {
+              "type": "header",
+              "content": "Social Icons Setting"
+            },
+               {
+                "type": "paragraph",
+                "content": "To display your social media accounts, link them in your theme settings."
+              },
+              {
+                "type":"checkbox",
+                "id":"socialMenu",
+                "label":"Show Social Media Icons",
+                "default":false
+                },
+              {
+                "type": "header",
+                "content": "Follow on Shop"
+              },
+              {
+                  "type": "checkbox",
+                  "id": "enable_follow_on_shop",
+                  "label": "Enable Follow on Shop",
+                  "info": "Display follow button for your storefront on the Shop app. [Learn more](https://help.shopify.com/manual/online-store/themes/customizing-themes/follow-on-shop)",
+                  "default": false
+              },
+              {
+                "type": "header",
+                "content": "Appereance"
+              },
+              {
+                  "type": "select",
+                  "id": "s_alignment",
+                  "label": "Alignment",
+                  "default": "center",
+                  "options": [
+                      { "value": "start", "label": "Left" },
+                      { "value": "center", "label": "Center" },
+                      { "value": "end", "label": "Right" }
+                  ]
+              },
+              {
+                "type": "select",
+                "id": "s_alignment_mob",
+                "label": "Mobile Alignment",
+                "default": "center",
+                "options": [
+                    { "value": "start", "label": "Left" },
+                    { "value": "center", "label": "Center" },
+                    { "value": "end", "label": "Right" }
+                ]
+            },
+              {
+                  "type": "checkbox",
+                  "id": "s_fullwidth",
+                  "label": "Full width row",
+                  "default": true
+              },
+              {
+                "type": "text",
+                "id": "s_custom_class",
+                "label": "Custom classes"
+              }
+          ]
+        },
+        {
+          "type": "legalLinks",
+          "name": "Terms and policies",
+          "limit": 1,
+          "settings": [
+            {
+              "type": "paragraph",
+              "content": "Use to show links to your terms of service, privacy policies, refund policies, shipping policies, and Impressum."
+            },
+            {
+              "type": "link_list",
+              "id": "legalMenu",
+              "label": "Menu",
+              "info": "Only top-level menu items are displayed."
+            },
+            {
+              "type": "header",
+              "content": "Appereance"
+            },
+            {
+                "type": "select",
+                "id": "alignment",
+                "label": "Alignment",
+                "default": "start",
+                "options": [
+                    { "value": "start", "label": "Left" },
+                    { "value": "center", "label": "Center" },
+                    { "value": "end", "label": "Right" }
+                ]
+            },
+            {
+                "type": "checkbox",
+                "id": "multicolumn",
+                "label": "Multi-column menu",
+                "default": false,
+                "info": "Does not work when \"Full width row\" active."
+            },
+            {
+                "type": "checkbox",
+                "id": "fullwidth",
+                "label": "Full width row",
+                "default": true
+            }
+          ]
+        },
+        {
+          "type": "socials",
+          "name": "Social media",
+          "limit": 1,
+          "settings": [
+            {
+              "type": "paragraph",
+              "content": "To display your social media accounts, link them in your theme settings."
+            },
+            {
+              "type": "header",
+              "content": "Follow on Shop"
+            },
+            {
+                "type": "checkbox",
+                "id": "enable_follow_on_shop",
+                "label": "Enable Follow on Shop",
+                "info": "Display follow button for your storefront on the Shop app. [Learn more](https://help.shopify.com/manual/online-store/themes/customizing-themes/follow-on-shop)",
+                "default": false
+            },
+            {
+              "type": "header",
+              "content": "Appereance"
+            },
+            {
+                "type": "select",
+                "id": "alignment",
+                "label": "Alignment",
+                "default": "center",
+                "options": [
+                    { "value": "flex-start", "label": "Left" },
+                    { "value": "center", "label": "Center" },
+                    { "value": "flex-end", "label": "Right" }
+                ]
+            },
+            {
+                "type": "checkbox",
+                "id": "fullwidth",
+                "label": "Full width row",
+                "default": true
+            },
+            {
+              "type": "text",
+              "id": "custom_class",
+              "label": "Custom classes"
+            }
+          ]
+        },
+        {
+          "type": "motto",
+          "name": "About your business",
+          "limit": 1,
+          "settings": [
+            {
+              "type": "richtext",
+              "id": "motto",
+              "label": "Description",
+              "default": "<p>Use this to add additional information about your business, e.g. address, opening hours etc.</p>",
+              "info": "Talk about your business"
+            },
+            {
+              "type": "header",
+              "content": "Appereance"
+            },
+            {
+                "type": "checkbox",
+                "id": "fullwidth",
+                "label": "Full width row",
+                "default": false
+            }
+          ]
+        }
+      ],
+      "default": {
+        "blocks": [
+          { "type": "motto" },
+          { "type": "newsletter" },
+          { "type": "menu" },
+          { "type": "socials" },
+          { "type": "legalLinks" }
+        ]
+      }
+    }
+    {% endschema %}
