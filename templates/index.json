@@ -240,7 +240,8 @@
         "template--14900316110918__7ea942fc-6116-4136-82d2-684ce7ff29a5-button-1"
       ],
       "settings": {
-        "img_border_radius": 12,
+        "image": "shopify:\/\/shop_images\/newborn-baby.jpg",
+        "img_border_radius": 25,
         "height": "adapt",
         "desktop_image_width": "medium",
         "layout": "image_first",
